@@ -13,6 +13,19 @@ button{font:inherit;color:inherit}.app{max-width:1500px;margin:auto;padding:16px
 .view{display:none;padding-top:16px}.view.active{display:block}.grid{display:grid;grid-template-columns:240px 1fr 330px;gap:12px}.panel{background:linear-gradient(145deg,#081326ee,#050a17ee);border:1px solid var(--line);box-shadow:0 0 25px #001c4433;padding:14px}.title{color:var(--purple);letter-spacing:2px;font-weight:800}.muted{color:var(--muted);font-size:13px}.side{display:flex;flex-direction:column;gap:7px}.phase{margin-top:12px}.phase h3{margin:7px 0}.figure{min-height:650px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.figure img{width:100%;max-height:650px;object-fit:cover;object-position:center;border:1px solid #122b50}.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.legend span{font-size:11px;padding:6px 8px;border:1px solid #17355d}.rank-b{color:#3e8cff}.rank-p{color:#ffb52e}.rank-a{color:#9d4cff}.rank-e{color:#ff36c8}.muscles{display:grid;gap:7px}.muscle{padding:9px;border:1px solid #15345d;background:#071126;cursor:pointer}.muscle:hover{border-color:var(--cyan)}.mrow{display:flex;justify-content:space-between;font-size:12px}.bar{height:7px;background:#14213a;margin-top:7px}.bar i{display:block;height:100%}.beginner .bar i{background:#22d3ee}.developing .bar i{background:#3e8cff}.proficient .bar i{background:#ffb52e}.advanced .bar i{background:#9d4cff}.elite .bar i{background:#ff36c8}.stats{display:grid;gap:8px}.stat{display:flex;justify-content:space-between;border-bottom:1px solid #122746;padding:7px}.big{font-size:28px;font-weight:900}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{padding:14px;border:1px solid var(--line);background:#071126}.quest{display:flex;justify-content:space-between;align-items:center;gap:10px}.complete{border-color:var(--green);opacity:.65}.btn{background:#0b1830;border:1px solid var(--cyan);padding:9px 12px;cursor:pointer}.btn:hover{box-shadow:0 0 14px #41d9ff55}.danger{border-color:#ff4668}.input{width:100%;padding:10px;background:#050b18;color:white;border:1px solid var(--line);margin:5px 0}.mobile-note{display:none}
 @media(max-width:1050px){.grid{grid-template-columns:190px 1fr}.grid>aside:last-child{grid-column:1/-1}.player{display:none}.cards{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.app{padding:9px}.top{display:block}.brand{margin-bottom:8px}.nav{width:100%}.nav button{padding:9px 10px;font-size:11px}.grid{grid-template-columns:1fr}.side{display:grid;grid-template-columns:repeat(3,1fr)}.figure{min-height:430px}.figure img{max-height:430px}.cards{grid-template-columns:1fr}.mobile-note{display:block}.panel{padding:11px}}
+
+.figure.reactive{position:relative;min-height:650px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.reactive-wrap{position:relative;width:min(100%,620px);height:auto;line-height:0}
+.reactive-wrap img{display:block;width:100%;height:auto;border:1px solid #122b50}
+.body-glow{position:absolute;border-radius:50%;pointer-events:auto;mix-blend-mode:screen;opacity:0;filter:blur(7px);transition:opacity .45s,transform .45s,filter .45s;box-shadow:0 0 28px 10px currentColor}
+.body-glow:hover{transform:scale(1.12);filter:blur(4px);z-index:5}
+.body-glow[data-rank="beginner"]{color:#21d9ff;background:radial-gradient(circle,rgba(33,217,255,.95) 0,rgba(33,217,255,.3) 35%,transparent 72%)}
+.body-glow[data-rank="developing"]{color:#3e8cff;background:radial-gradient(circle,rgba(62,140,255,.95) 0,rgba(62,140,255,.32) 35%,transparent 72%)}
+.body-glow[data-rank="proficient"]{color:#ffb52e;background:radial-gradient(circle,rgba(255,181,46,.95) 0,rgba(255,181,46,.32) 35%,transparent 72%)}
+.body-glow[data-rank="advanced"]{color:#9d4cff;background:radial-gradient(circle,rgba(157,76,255,.98) 0,rgba(157,76,255,.35) 35%,transparent 72%)}
+.body-glow[data-rank="elite"]{color:#ff36c8;background:radial-gradient(circle,rgba(255,54,200,1) 0,rgba(255,54,200,.4) 35%,transparent 72%)}
+.body-sync{position:absolute;right:10px;top:10px;background:#050b18dd;border:1px solid #9d4cff;color:#d8baff;padding:7px 10px;font-size:10px;letter-spacing:2px;box-shadow:0 0 18px #9d4caa44}
+@media(max-width:720px){.figure.reactive{min-height:430px}.body-sync{font-size:8px;padding:5px 7px}.body-glow{filter:blur(5px)}}
 </style>
 </head>
 <body>
@@ -50,7 +63,25 @@ button{font:inherit;color:inherit}.app{max-width:1500px;margin:auto;padding:16px
 
 <main>
   <div id="body-overview" class="bodytab">
-    <div class="panel figure"><img src="body-map.png" alt="Dorento's color-coded muscle map"></div>
+    <div class="panel figure reactive">
+  <div class="reactive-wrap" id="reactiveBody">
+    <img src="body-map-clean.png" alt="Dorento's reactive body map">
+    <div class="body-sync">LIVE BODY SYNC</div>
+    <div class="body-glow" data-muscle="Shoulders" style="left:20%;top:20%;width:15%;height:13%"></div>
+    <div class="body-glow" data-muscle="Chest" style="left:20%;top:29%;width:18%;height:12%"></div>
+    <div class="body-glow" data-muscle="Biceps" style="left:14%;top:29%;width:11%;height:18%"></div>
+    <div class="body-glow" data-muscle="Forearms" style="left:10%;top:43%;width:9%;height:19%"></div>
+    <div class="body-glow" data-muscle="Core / Abs" style="left:24%;top:37%;width:12%;height:19%"></div>
+    <div class="body-glow" data-muscle="Quads" style="left:18%;top:55%;width:18%;height:24%"></div>
+    <div class="body-glow" data-muscle="Calves" style="left:19%;top:79%;width:12%;height:15%"></div>
+    <div class="body-glow" data-muscle="Upper Back" style="left:56%;top:20%;width:20%;height:17%"></div>
+    <div class="body-glow" data-muscle="Back / Lats" style="left:55%;top:31%;width:21%;height:23%"></div>
+    <div class="body-glow" data-muscle="Triceps" style="left:75%;top:31%;width:10%;height:19%"></div>
+    <div class="body-glow" data-muscle="Glutes" style="left:55%;top:51%;width:20%;height:15%"></div>
+    <div class="body-glow" data-muscle="Hamstrings" style="left:56%;top:63%;width:18%;height:21%"></div>
+    <div class="body-glow" data-muscle="Calves" style="left:59%;top:82%;width:12%;height:13%"></div>
+  </div>
+</div>
     <div class="legend">
       <span class="rank-b">BLUE • DEVELOPING 25–49%</span><span class="rank-p">GOLD • PROFICIENT 50–74%</span><span class="rank-a">PURPLE • ADVANCED 75–89%</span><span class="rank-e">PINK • ELITE 90–100%</span>
     </div>
@@ -89,21 +120,31 @@ button{font:inherit;color:inherit}.app{max-width:1500px;margin:auto;padding:16px
 </div>
 
 <script>
-const muscles=[
- ['Biceps',0],['Triceps',0],['Chest',0],['Shoulders',0],['Back / Lats',0],['Upper Back',0],['Core / Abs',0],['Glutes',0],['Quads',0],['Hamstrings',0],['Calves',0],['Forearms',0]
-];
-let state=JSON.parse(localStorage.getItem('dorentoV3')||'{"xp":0,"level":1,"workouts":0,"quests":{},"stats":{"STR":0,"VIT":0,"INT":0,"DIS":0,"WLT":0,"CON":0},"journal":""}');
+const muscleNames=['Biceps','Triceps','Chest','Shoulders','Back / Lats','Upper Back','Core / Abs','Glutes','Quads','Hamstrings','Calves','Forearms'];
+let muscles=muscleNames.map(n=>[n,0]);
+function syncMuscles(){
+  state.muscles=state.muscles||Object.fromEntries(muscleNames.map(n=>[n,0]));
+  muscles=muscleNames.map(n=>[n,Math.max(0,Math.min(100,Number(state.muscles[n]||0)))]);
+}
+let state=JSON.parse(localStorage.getItem('dorentoV3')||'{"xp":0,"level":1,"workouts":0,"quests":{},"stats":{"STR":0,"VIT":0,"INT":0,"DIS":0,"WLT":0,"CON":0},"muscles":{"Biceps":0,"Triceps":0,"Chest":0,"Shoulders":0,"Back / Lats":0,"Upper Back":0,"Core / Abs":0,"Glutes":0,"Quads":0,"Hamstrings":0,"Calves":0,"Forearms":0},"journal":""}');
 function save(){localStorage.setItem('dorentoV3',JSON.stringify(state));render()}
-if(!localStorage.getItem('dorentoV3')){state.stats={STR:0,VIT:0,INT:0,DIS:0,WLT:0,CON:0};}
+if(!localStorage.getItem('dorentoV3')){state.stats={STR:0,VIT:0,INT:0,DIS:0,WLT:0,CON:0};state.muscles=Object.fromEntries(muscleNames.map(n=>[n,0]));}
 function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id))}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
 function rank(v){return v>=90?['ELITE','elite']:v>=75?['ADVANCED','advanced']:v>=50?['PROFICIENT','proficient']:v>=25?['DEVELOPING','developing']:['UNTRAINED','beginner']}
 function render(){
+ syncMuscles();
  document.getElementById('lvl').textContent=state.level;document.getElementById('xpbar').style.width=(state.xp%500)/5+'%';document.getElementById('xptxt').textContent=(state.xp%500)+' / 500 XP';
  const ids=['str','vit','int','dis','wlt','con'];ids.forEach(k=>document.getElementById(k).textContent=state.stats[k.toUpperCase()]||1);
  document.getElementById('bodyLevel').textContent=Math.max(1,Math.floor(state.workouts/3)+1);document.getElementById('workoutCount').textContent=state.workouts+' workouts logged';
  document.getElementById('muscles').innerHTML=muscles.map(([n,v])=>{let [r,c]=rank(v);return `<div class="muscle ${c}" onclick="alert('${n}: ${v}% • ${r}')"><div class="mrow"><b>${n}</b><span>Lv. ${Math.floor(v/10)}</span></div><div class="bar"><i style="width:${v}%"></i></div><small class="muted">${v}% • ${r}</small></div>`}).join('');
  document.getElementById('muscleCards').innerHTML=muscles.map(([n,v])=>{let [r,c]=rank(v);return `<div class="card ${c}"><b>${n}</b><div class="big">${v}%</div><span>${r}</span></div>`}).join('');
+ document.querySelectorAll('.body-glow').forEach(el=>{
+   const name=el.dataset.muscle, v=Number(state.muscles?.[name]||0), rr=rank(v)[1];
+   el.dataset.rank=rr;
+   el.style.opacity=(0.04 + (v/100)*0.82).toFixed(2);
+   el.title=`${name}: ${v}% • ${rank(v)[0]}`;
+ });
  renderQuests();
 }
 const quests=[['Morning protocol','Wake up, hygiene, make your bed',20],['Study arc','25 minutes focused study',25],['Training quest',"Complete today's planned training",100],['Read','10 pages or 15 minutes',20],['Wealth arc','Learn a useful money/skill topic',25],['Daily debrief','Write your journey entry',15]];
@@ -113,7 +154,7 @@ function gain(xp,stat,rerender=true){state.xp+=xp;state.stats[stat]=(state.stats
 function logWorkout(){state.workouts++;gain(100,'STR',false);state.stats.VIT++;state.stats.DIS++;save();alert('WORKOUT LOGGED\\n+100 XP\\nSTR +1\\nVIT +1\\nDIS +1')}
 function saveJournal(){state.journal=document.getElementById('journal').value;save();document.getElementById('saved').textContent='Entry saved locally.'}
 function exportSave(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='dorento-system-save.json';a.click()}
-function importSave(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);save();alert('SAVE IMPORTED')}catch{alert('Invalid save file')}};r.readAsText(f)}
+function importSave(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);state.muscles=state.muscles||Object.fromEntries(muscleNames.map(n=>[n,0]));save();alert('SAVE IMPORTED')}catch{alert('Invalid save file')}};r.readAsText(f)}
 function resetSave(){if(confirm('Reset all V3 progress on this device?')){localStorage.removeItem('dorentoV3');location.reload()}}
 function bodyTab(btn,id){document.querySelectorAll('.bodytab').forEach(x=>x.style.display='none');document.getElementById('body-'+id).style.display='block';btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
 document.getElementById('journal').value=state.journal||'';render();
