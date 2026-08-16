@@ -1,0 +1,11 @@
+{
+  "name": "Dorento's System",
+  "short_name": "Dorento System",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050814",
+  "theme_color": "#050814",
+  "description": "Dorento's 18 to 25 life RPG."
+}

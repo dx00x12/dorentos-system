@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050814">
+<title>Dorento's System</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#050814;--panel:#0a1020;--panel2:#0d1529;--line:#1b3152;--cyan:#52d8ff;--cyan2:#9deeff;--text:#e9f6ff;--muted:#7f9bb5;--danger:#ff4d72;--gold:#ffd86b;--ok:#5dffae}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#10254a 0,#050814 48%);color:var(--text);font-family:Inter,Segoe UI,system-ui,sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:1200px;margin:auto;padding:18px 18px 100px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid var(--line);padding-bottom:15px}
+.brand{letter-spacing:.16em;font-weight:800}.brand small{display:block;color:var(--cyan);font-size:10px;letter-spacing:.3em;margin-bottom:4px}.menu{display:flex;gap:8px;flex-wrap:wrap}.menu button{background:#08101e;border:1px solid var(--line);color:var(--muted);padding:9px 12px;border-radius:4px}.menu button.active,.menu button:hover{color:var(--cyan2);border-color:var(--cyan);box-shadow:0 0 14px #52d8ff18}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;margin-top:18px}.panel{background:linear-gradient(145deg,#0b1324e8,#070c18f2);border:1px solid var(--line);box-shadow:0 0 30px #0008, inset 0 0 30px #52d8ff05;position:relative;overflow:hidden}.panel:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 0,transparent 97%,#52d8ff20 100%);}.pad{padding:18px}.sys{color:var(--cyan);font-size:11px;letter-spacing:.25em}.player{font-size:31px;font-weight:900;margin:6px 0}.sub{color:var(--muted);font-size:13px}.xp{margin-top:18px}.bar{height:10px;background:#02050b;border:1px solid #19304d}.fill{height:100%;background:linear-gradient(90deg,#2a9dff,#8feeff);box-shadow:0 0 14px #52d8ff66}.xptext{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px}.stat{border:1px solid #17304e;background:#07101e;padding:10px;text-align:center}.stat b{display:block;font-size:18px;color:var(--cyan2)}.stat span{font-size:9px;color:var(--muted);letter-spacing:.12em}
+.rank{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.rank .letter{font-size:92px;line-height:.9;font-weight:900;color:#d7f8ff;text-shadow:0 0 24px #52d8ff99}.rank .name{letter-spacing:.3em;color:var(--cyan);font-size:12px;margin-top:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.title{font-size:12px;letter-spacing:.2em;color:var(--cyan);margin-bottom:12px}.quest{display:flex;gap:12px;align-items:center;border:1px solid #17304e;background:#07101c;padding:12px;margin:8px 0}.quest.done{opacity:.5}.quest input{accent-color:var(--cyan);width:18px;height:18px}.qmain{flex:1}.qname{font-weight:750}.qmeta{font-size:11px;color:var(--muted);margin-top:3px}.evidence{border:1px solid #27466b;background:#0b1728;color:var(--cyan2);padding:7px 9px;border-radius:3px;font-size:11px}
+.notice{padding:12px;border:1px solid #4e2332;background:#170b13;color:#ffb5c5;font-size:12px}.ok{border-color:#205a48;background:#071a15;color:#a8ffd6}
+textarea,input[type=text],input[type=number]{width:100%;background:#050a14;color:var(--text);border:1px solid var(--line);padding:11px;border-radius:3px;outline:none}textarea{min-height:130px;resize:vertical}.row{display:flex;gap:10px}.row>*{flex:1}.btn{background:#0a1b2d;color:var(--cyan2);border:1px solid var(--cyan);padding:10px 14px;border-radius:3px}.btn.secondary{border-color:var(--line);color:var(--muted)}.btn.danger{border-color:#8b2943;color:#ff9bb0}.tabs{display:none}.page{display:none}.page.active{display:block}.journal-card{border-left:2px solid var(--cyan);padding:12px 14px;background:#07101c;margin:10px 0}.small{font-size:11px;color:var(--muted)}.achievement{border:1px solid #3b3551;background:#0c0b17;padding:12px;margin:8px 0}.locked{opacity:.45}.toast{position:fixed;right:18px;bottom:18px;background:#071522;border:1px solid var(--cyan);color:var(--cyan2);padding:13px 16px;box-shadow:0 0 25px #52d8ff33;display:none;z-index:20}.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modalbox{max-width:520px;width:100%;background:#08101d;border:1px solid var(--cyan);padding:20px;box-shadow:0 0 45px #000}.preview{max-width:100%;max-height:280px;margin-top:10px;display:none;border:1px solid var(--line)}.dangerText{color:#ff8098}
+@media(max-width:800px){.hero,.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(5,1fr)}.menu button{padding:8px 9px}.player{font-size:25px}}
+@media(max-width:520px){.app{padding:12px 10px 90px}.stats{gap:4px}.stat{padding:8px 3px}.stat b{font-size:15px}.stat span{font-size:8px}.menu{display:grid;grid-template-columns:repeat(4,1fr);width:100%}.menu button{font-size:10px;padding:8px 4px}.top{align-items:flex-start;flex-direction:column}.rank .letter{font-size:70px}}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#050814">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><small>SYSTEM ONLINE</small>DORENTO'S SYSTEM</div>
+  <nav class="menu">
+    <button data-page="home" class="active">HOME</button><button data-page="quests">QUESTS</button><button data-page="status">STATUS</button><button data-page="training">TRAIN</button><button data-page="journey">JOURNEY</button><button data-page="wealth">WEALTH</button><button data-page="settings">SYSTEM</button>
+  </nav>
+</header>
+
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="panel pad">
+      <div class="sys">PLAYER PROFILE</div><div class="player">DORENTO WILLIAMS</div><div class="sub">AGE 18 · CHAPTER 01 · THE AWAKENING</div>
+      <div class="xp"><div class="bar"><div id="xpfill" class="fill"></div></div><div class="xptext"><span id="leveltxt">LEVEL 1</span><span id="xptxt">0 / 500 XP</span></div></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="panel rank"><div class="sys">CURRENT RANK</div><div class="letter" id="rank">E</div><div class="name">THE AWAKENING</div></div>
+  </div>
+  <div class="grid">
+    <div class="panel pad"><div class="title">TODAY'S MAIN QUEST</div><div id="homequests"></div></div>
+    <div class="panel pad"><div class="title">SYSTEM MESSAGE</div><div class="notice ok">You are not required to be perfect. You are required to return. Complete the smallest useful action when motivation is low.</div><div style="height:10px"></div><div class="small">Journey started: 21 July 2026 · Goal: document the transformation from 18 → 25.</div></div>
+  </div>
+</section>
+
+<section id="quests" class="page">
+  <div class="panel pad"><div class="title">DAILY QUESTS</div><div id="questlist"></div><div class="small">Evidence can be a photo or short video. The app stores it locally on this device in this first version.</div></div>
+</section>
+
+<section id="status" class="page">
+  <div class="grid">
+    <div class="panel pad"><div class="title">STATUS</div><div id="statuslist"></div></div>
+    <div class="panel pad"><div class="title">ACHIEVEMENTS</div><div id="achievements"></div></div>
+  </div>
+</section>
+
+<section id="training" class="page">
+  <div class="panel pad"><div class="title">TRAINING PROGRAM · STARTER ARC</div>
+    <div class="notice">This is a general starter programme, not medical advice. Progress gradually and stop if you feel pain or become unwell.</div>
+    <div style="height:12px"></div>
+    <div id="workout"></div>
+  </div>
+</section>
+
+<section id="journey" class="page">
+  <div class="grid">
+    <div class="panel pad"><div class="title">TODAY'S JOURNAL</div>
+      <label class="small">What happened today?</label><textarea id="journal" placeholder="Write honestly. Wins, failures, thoughts, anything."></textarea>
+      <div style="height:10px"></div><label class="small">How are you feeling?</label><input id="mood" type="text" placeholder="e.g. tired, focused, frustrated, proud">
+      <div style="height:10px"></div><button class="btn" id="savejournal">SAVE CHAPTER</button>
+    </div>
+    <div class="panel pad"><div class="title">EVIDENCE VAULT</div>
+      <div class="small">Add a photo or video to document your journey. Files remain on this device in this version.</div>
+      <div style="height:10px"></div><input id="media" type="file" accept="image/*,video/*" capture="environment">
+      <img id="preview" class="preview"><video id="vpreview" class="preview" controls></video>
+      <div style="height:10px"></div><button class="btn" id="saveevidence">SAVE EVIDENCE</button>
+      <div id="evidenceList"></div>
+    </div>
+  </div>
+  <div class="panel pad" style="margin-top:16px"><div class="title">JOURNEY LOG</div><div id="journalList"></div></div>
+</section>
+
+<section id="wealth" class="page">
+  <div class="grid">
+    <div class="panel pad"><div class="title">WEALTH QUEST</div>
+      <p class="small">Build skills first. Learn before risking money. This tracker does not provide financial advice.</p>
+      <input id="wealthGoal" type="text" placeholder="Current wealth goal">
+      <div style="height:10px"></div><input id="wealthLearn" type="text" placeholder="What are you learning today?">
+      <div style="height:10px"></div><button class="btn" id="savewealth">LOG WEALTH PROGRESS</button>
+    </div>
+    <div class="panel pad"><div class="title">WEALTH LOG</div><div id="wealthList"></div></div>
+  </div>
+</section>
+
+<section id="settings" class="page">
+  <div class="panel pad">
+    <div class="title">SYSTEM SETTINGS</div>
+    <div class="small">Your first prototype saves data in your browser's local storage. Export regularly so you don't lose your seven-year record.</div>
+    <div style="height:12px"></div><div class="row"><button class="btn" id="export">EXPORT SAVE</button><button class="btn secondary" id="importBtn">IMPORT SAVE</button><input id="importFile" type="file" accept="application/json" hidden></div>
+    <div style="height:12px"></div><button class="btn danger" id="reset">RESET LOCAL SAVE</button>
+  </div>
+</section>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox"><div class="title">RECOVERY QUEST</div><div id="recoveryText"></div><div style="height:14px"></div><button class="btn" id="closeModal">UNDERSTOOD</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='dorento_system_v1';
+const defaults={
+ xp:0, level:1, rank:'E',
+ stats:{STR:1,VIT:1,INT:1,DIS:1,WLT:1},
+ quests:[
+  {id:'morning',name:'Morning Protocol',meta:'Wake, hygiene, make your bed, prepare for the day.',xp:20,stat:'DIS',done:false,evidence:false},
+  {id:'school',name:'School Mission',meta:'Show up and participate. Your future starts here.',xp:25,stat:'INT',done:false,evidence:false},
+  {id:'study',name:'Study Session',meta:'Minimum 30 minutes. Aim for 45–60.',xp:45,stat:'INT',done:false,evidence:false},
+  {id:'train',name:'Training Quest',meta:"Complete today\'s workout or an active recovery session.",xp:50,stat:'STR',done:false,evidence:false},
+  {id:'wealth',name:'Wealth Quest',meta:'Learn a useful skill for 20–30 minutes.',xp:40,stat:'WLT',done:false,evidence:false},
+  {id:'read',name:'Read',meta:'Read at least 5 pages.',xp:20,stat:'INT',done:false,evidence:false},
+  {id:'journal',name:'Daily Debrief',meta:'Write honestly about the day.',xp:15,stat:'DIS',done:false,evidence:false}
+ ],
+ journals:[], evidence:[], wealth:[], day:'', failed:0
+};
+let S=load();
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));return x?Object.assign(structuredClone(defaults),x):structuredClone(defaults)}catch(e){return structuredClone(defaults)}}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));render()}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}
+function dateKey(){return new Date().toISOString().slice(0,10)}
+function resetDay(){if(S.day!==dateKey()){S.day=dateKey();S.quests=S.quests.map(q=>({...q,done:false,evidence:false}));S.failed=0;save()}}
+resetDay();
+
+function xpNeeded(l){return 500+(l-1)*250}
+function completeQuest(id){
+ const q=S.quests.find(x=>x.id===id); if(!q||q.done)return;
+ q.done=true; S.xp+=q.xp; S.stats[q.stat]+=1;
+ while(S.xp>=xpNeeded(S.level)){S.xp-=xpNeeded(S.level);S.level++;toast('LEVEL UP · LEVEL '+S.level)}
+ toast('QUEST COMPLETE · +'+q.xp+' XP');
+ save();
+}
+function failQuest(id){
+ const q=S.quests.find(x=>x.id===id); if(!q||q.done)return;
+ q.done=false;S.failed++;
+ const recovery={train:'20 controlled push-ups or 10-minute walk',study:'15-minute catch-up study',read:'read 5 pages now',wealth:'20 minutes of skill learning',morning:'complete the missed routine now',school:'write a 10-minute study recap',journal:'complete the daily debrief now'}[id]||'10 minutes of useful work';
+ document.getElementById('recoveryText').innerHTML='<b>'+q.name+'</b> was not completed.<br><br><span class="dangerText">RECOVERY QUEST GENERATED:</span><br><br>'+recovery+'<br><br><span class="small">The goal is recovery, not punishment.</span>';
+ document.getElementById('modal').style.display='flex';save();
+}
+function evidence(id){document.getElementById('media').click();document.getElementById('media').dataset.quest=id;document.querySelector('[data-page="journey"]').click();toast('Choose your evidence file')}
+function renderStats(){const el=document.getElementById('stats');el.innerHTML=Object.entries(S.stats).map(([k,v])=>'<div class="stat"><b>'+v+'</b><span>'+k+'</span></div>').join('')}
+function questHTML(q){return `<div class="quest ${q.done?'done':''}">
+<input type="checkbox" ${q.done?'checked':''} onchange="${q.done?'':`completeQuest('${q.id}')`}">
+<div class="qmain"><div class="qname">${q.name}</div><div class="qmeta">${q.meta} · +${q.xp} XP</div></div>
+${q.done?'<span class="small">COMPLETE</span>':`<button class="evidence" onclick="evidence('${q.id}')">PROOF</button><button class="evidence" onclick="failQuest('${q.id}')">FAIL</button>`}</div>`}
+function render(){
+ document.getElementById('leveltxt').textContent='LEVEL '+S.level;
+ const need=xpNeeded(S.level);document.getElementById('xptxt').textContent=S.xp+' / '+need+' XP';document.getElementById('xpfill').style.width=Math.min(100,S.xp/need*100)+'%';
+ document.getElementById('rank').textContent=S.rank;renderStats();
+ document.getElementById('questlist').innerHTML=S.quests.map(questHTML).join('');
+ document.getElementById('homequests').innerHTML=S.quests.slice(0,4).map(questHTML).join('');
+ document.getElementById('statuslist').innerHTML=Object.entries(S.stats).map(([k,v])=>`<div class="quest"><div class="qmain"><b>${k}</b><div class="qmeta">Current stat level</div></div><b style="color:var(--cyan2)">${v}</b></div>`).join('');
+ const a=[['FIRST STEP',S.quests.some(q=>q.done),'Complete your first quest'],['SEVEN DAY ARC',false,'Maintain a 7-day completion streak'],['BODY BUILDER',S.stats.STR>=10,'Reach STR 10'],['MIND BUILDER',S.stats.INT>=10,'Reach INT 10'],['WEALTH SEEKER',S.stats.WLT>=5,'Reach WLT 5'],['SYSTEM LEVEL 10',S.level>=10,'Reach Level 10']];
+ document.getElementById('achievements').innerHTML=a.map(x=>`<div class="achievement ${x[1]?'':'locked'}"><b>${x[1]?'🔓':'🔒'} ${x[0]}</b><div class="small">${x[2]}</div></div>`).join('');
+ document.getElementById('journalList').innerHTML=S.journals.length?S.journals.slice().reverse().map(j=>`<div class="journal-card"><b>${j.date}</b><div class="small">${j.mood||''}</div><p>${escapeHTML(j.text)}</p></div>`).join(''):'<div class="small">No chapters recorded yet.</div>';
+ document.getElementById('evidenceList').innerHTML=S.evidence.slice().reverse().map(e=>`<div class="journal-card"><b>${e.date}</b><div class="small">${e.type} · ${e.quest||'Journey evidence'}</div></div>`).join('');
+ document.getElementById('wealthList').innerHTML=S.wealth.slice().reverse().map(w=>`<div class="journal-card"><b>${w.date}</b><div>${escapeHTML(w.learn)}</div><div class="small">${escapeHTML(w.goal||'')}</div></div>`).join('')||'<div class="small">No wealth entries yet.</div>';
+}
+function escapeHTML(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+document.querySelectorAll('.menu button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(b.dataset.page).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));b.classList.add('active')});
+document.getElementById('savejournal').onclick=()=>{const t=document.getElementById('journal').value.trim();if(!t)return toast('Write something first');S.journals.push({date:new Date().toLocaleString(),text:t,mood:document.getElementById('mood').value});const q=S.quests.find(x=>x.id==='journal');if(q&&!q.done)completeQuest('journal');else save();document.getElementById('journal').value='';document.getElementById('mood').value='';toast('Chapter saved')};
+document.getElementById('savewealth').onclick=()=>{const g=document.getElementById('wealthGoal').value.trim(),l=document.getElementById('wealthLearn').value.trim();if(!l)return toast('Add what you learned');S.wealth.push({date:new Date().toLocaleString(),goal:g,learn:l});const q=S.quests.find(x=>x.id==='wealth');if(q&&!q.done)completeQuest('wealth');else save();document.getElementById('wealthGoal').value='';document.getElementById('wealthLearn').value='';toast('Wealth progress logged')};
+document.getElementById('media').onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f);const img=document.getElementById('preview'),vid=document.getElementById('vpreview');img.style.display='none';vid.style.display='none';if(f.type.startsWith('image/')){img.src=u;img.style.display='block'}else{vid.src=u;vid.style.display='block'}};
+document.getElementById('saveevidence').onclick=()=>{const f=document.getElementById('media').files[0];if(!f)return toast('Choose a photo or video first');const id=document.getElementById('media').dataset.quest||'';S.evidence.push({date:new Date().toLocaleString(),type:f.type,quest:id});if(id){const q=S.quests.find(x=>x.id===id);if(q)q.evidence=true}save();toast('Evidence logged · + proof');document.getElementById('media').value=''};
+document.getElementById('closeModal').onclick=()=>document.getElementById('modal').style.display='none';
+document.getElementById('export').onclick=()=>{const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dorento-system-save.json';a.click();toast('Save exported')};
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);save();toast('Save imported')}catch{toast('Invalid save file')}};r.readAsText(f)};
+document.getElementById('reset').onclick=()=>{if(confirm('Reset all local progress? Export first if you want a backup.')){localStorage.removeItem(KEY);location.reload()}};
+document.getElementById('workout').innerHTML=`
+<div class="quest"><div class="qmain"><b>FULL BODY A</b><div class="qmeta">3 rounds · 8–15 squats · 6–12 push-ups · 8–12 rows if available · 20–30 sec plank</div></div></div>
+<div class="quest"><div class="qmain"><b>CARDIO / WALK</b><div class="qmeta">20–40 minutes at an easy/moderate pace. Build gradually.</div></div></div>
+<div class="quest"><div class="qmain"><b>RECOVERY</b><div class="qmeta">On a rest day: 10–15 minutes mobility + easy walking.</div></div></div>
+<div class="small">Next version will use your actual height, weight, equipment, fitness level and physique goal to generate a personalized programme.</div>`;
+render();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script></body>
+</html>
