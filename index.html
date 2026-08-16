@@ -105,7 +105,7 @@ function render(){
  document.getElementById('muscleCards').innerHTML=muscles.map(([n,v])=>{let [r,c]=rank(v);return `<div class="card ${c}"><b>${n}</b><div class="big">${v}%</div><span>${r}</span></div>`}).join('');
  renderQuests();
 }
-const quests=[['Morning protocol','Wake up, hygiene, make your bed',20],['Study arc','25 minutes focused study',25],['Training quest','Complete today's planned training',100],['Read','10 pages or 15 minutes',20],['Wealth arc','Learn a useful money/skill topic',25],['Daily debrief','Write your journey entry',15]];
+const quests=[['Morning protocol','Wake up, hygiene, make your bed',20],['Study arc','25 minutes focused study',25],['Training quest',"Complete today's planned training",100],['Read','10 pages or 15 minutes',20],['Wealth arc','Learn a useful money/skill topic',25],['Daily debrief','Write your journey entry',15]];
 function renderQuests(){document.getElementById('questList').innerHTML=quests.map((q,i)=>{let done=!!state.quests[i];return `<div class="panel quest ${done?'complete':''}" style="margin-top:8px"><div><b>${q[0]}</b><div class="muted">${q[1]} • +${q[2]} XP</div></div><button class="btn" ${done?'disabled':''} onclick="completeQuest(${i},${q[2]})">${done?'COMPLETED':'COMPLETE'}</button></div>`}).join('')}
 function completeQuest(i,xp){if(state.quests[i])return;state.quests[i]=true;gain(xp,'DIS',false);save()}
 function gain(xp,stat,rerender=true){state.xp+=xp;state.stats[stat]=(state.stats[stat]||1)+1;while(state.xp>=state.level*500)state.level++;if(rerender)save()}
