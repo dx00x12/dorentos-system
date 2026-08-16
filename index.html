@@ -90,25 +90,26 @@ button{font:inherit;color:inherit}.app{max-width:1500px;margin:auto;padding:16px
 
 <script>
 const muscles=[
- ['Biceps',78],['Triceps',71],['Chest',65],['Shoulders',72],['Back / Lats',76],['Upper Back',73],['Core / Abs',58],['Glutes',62],['Quads',70],['Hamstrings',60],['Calves',52],['Forearms',54]
+ ['Biceps',0],['Triceps',0],['Chest',0],['Shoulders',0],['Back / Lats',0],['Upper Back',0],['Core / Abs',0],['Glutes',0],['Quads',0],['Hamstrings',0],['Calves',0],['Forearms',0]
 ];
-let state=JSON.parse(localStorage.getItem('dorentoV3')||'{"xp":0,"level":1,"workouts":0,"quests":{},"stats":{"STR":1,"VIT":1,"INT":1,"DIS":1,"WLT":1,"CON":1},"journal":""}');
+let state=JSON.parse(localStorage.getItem('dorentoV3')||'{"xp":0,"level":1,"workouts":0,"quests":{},"stats":{"STR":0,"VIT":0,"INT":0,"DIS":0,"WLT":0,"CON":0},"journal":""}');
 function save(){localStorage.setItem('dorentoV3',JSON.stringify(state));render()}
+if(!localStorage.getItem('dorentoV3')){state.stats={STR:0,VIT:0,INT:0,DIS:0,WLT:0,CON:0};}
 function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id))}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
-function rank(v){return v>=90?['ELITE','elite']:v>=75?['ADVANCED','advanced']:v>=50?['PROFICIENT','proficient']:v>=25?['DEVELOPING','developing']:['BEGINNER','beginner']}
+function rank(v){return v>=90?['ELITE','elite']:v>=75?['ADVANCED','advanced']:v>=50?['PROFICIENT','proficient']:v>=25?['DEVELOPING','developing']:['UNTRAINED','beginner']}
 function render(){
  document.getElementById('lvl').textContent=state.level;document.getElementById('xpbar').style.width=(state.xp%500)/5+'%';document.getElementById('xptxt').textContent=(state.xp%500)+' / 500 XP';
  const ids=['str','vit','int','dis','wlt','con'];ids.forEach(k=>document.getElementById(k).textContent=state.stats[k.toUpperCase()]||1);
  document.getElementById('bodyLevel').textContent=Math.max(1,Math.floor(state.workouts/3)+1);document.getElementById('workoutCount').textContent=state.workouts+' workouts logged';
- document.getElementById('muscles').innerHTML=muscles.map(([n,v])=>{let [r,c]=rank(v);return `<div class="muscle ${c}" onclick="alert('${n}: ${v}% • ${r}')"><div class="mrow"><b>${n}</b><span>Lv. ${Math.max(1,Math.ceil(v/10))}</span></div><div class="bar"><i style="width:${v}%"></i></div><small class="muted">${v}% • ${r}</small></div>`}).join('');
+ document.getElementById('muscles').innerHTML=muscles.map(([n,v])=>{let [r,c]=rank(v);return `<div class="muscle ${c}" onclick="alert('${n}: ${v}% • ${r}')"><div class="mrow"><b>${n}</b><span>Lv. ${Math.floor(v/10)}</span></div><div class="bar"><i style="width:${v}%"></i></div><small class="muted">${v}% • ${r}</small></div>`}).join('');
  document.getElementById('muscleCards').innerHTML=muscles.map(([n,v])=>{let [r,c]=rank(v);return `<div class="card ${c}"><b>${n}</b><div class="big">${v}%</div><span>${r}</span></div>`}).join('');
  renderQuests();
 }
 const quests=[['Morning protocol','Wake up, hygiene, make your bed',20],['Study arc','25 minutes focused study',25],['Training quest',"Complete today's planned training",100],['Read','10 pages or 15 minutes',20],['Wealth arc','Learn a useful money/skill topic',25],['Daily debrief','Write your journey entry',15]];
 function renderQuests(){document.getElementById('questList').innerHTML=quests.map((q,i)=>{let done=!!state.quests[i];return `<div class="panel quest ${done?'complete':''}" style="margin-top:8px"><div><b>${q[0]}</b><div class="muted">${q[1]} • +${q[2]} XP</div></div><button class="btn" ${done?'disabled':''} onclick="completeQuest(${i},${q[2]})">${done?'COMPLETED':'COMPLETE'}</button></div>`}).join('')}
 function completeQuest(i,xp){if(state.quests[i])return;state.quests[i]=true;gain(xp,'DIS',false);save()}
-function gain(xp,stat,rerender=true){state.xp+=xp;state.stats[stat]=(state.stats[stat]||1)+1;while(state.xp>=state.level*500)state.level++;if(rerender)save()}
+function gain(xp,stat,rerender=true){state.xp+=xp;state.stats[stat]=(state.stats[stat]??0)+1;while(state.xp>=state.level*500)state.level++;if(rerender)save()}
 function logWorkout(){state.workouts++;gain(100,'STR',false);state.stats.VIT++;state.stats.DIS++;save();alert('WORKOUT LOGGED\\n+100 XP\\nSTR +1\\nVIT +1\\nDIS +1')}
 function saveJournal(){state.journal=document.getElementById('journal').value;save();document.getElementById('saved').textContent='Entry saved locally.'}
 function exportSave(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='dorento-system-save.json';a.click()}
