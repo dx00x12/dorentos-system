@@ -1,10 +1,4 @@
 {
-  "name":"Dorento's System V3",
-  "short_name":"Dorento's System",
-  "start_url":"./",
-  "display":"standalone",
-  "background_color":"#040711",
-  "theme_color":"#050817",
-  "description":"Dorento's personal life RPG system with a visual Body Arc.",
-  "icons":[]
+"name":"Dorento's System V4","short_name":"Dorento's System","start_url":"./","display":"standalone",
+"background_color":"#03050d","theme_color":"#050817","description":"Dorento's personal life RPG system"
 }
